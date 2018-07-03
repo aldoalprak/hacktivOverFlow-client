@@ -3,7 +3,7 @@
         <div class="navbar-fixed">
             <nav class="grey lighten-1">
                 <div class="nav-wrapper">
-                <a href="#!" class="brand-logo"><i class="material-icons">cloud</i>StackExchange</a>
+                <router-link :to="'/'"><a href class="brand-logo"><i class="material-icons">cloud</i>StackExchange</a></router-link>
                 </div>
             </nav>
         </div>

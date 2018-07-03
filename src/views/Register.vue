@@ -1,29 +1,26 @@
 <template>
-    <div class="login">
+    <div class="register">
         <div class="container">
-            <Login/>
+            <Register/>
         </div>
-        
     </div>
     
 </template>
 
 <script>
-import Login from '../components/Login.vue'
+import Register from '../components/Register.vue'
 
 export default {
-    name:"login",
+    name:"register",
     components:{
-        Login   
+        Register   
     }
 }
 </script>
 
 <style scoped>
-.login {
+.register {
     background-image: url("https://i.stack.imgur.com/jGlzr.png");
     background-size: cover
 }
-
-
 </style>

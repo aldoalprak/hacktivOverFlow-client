@@ -27,7 +27,6 @@
                             <label for="password">Password</label>
                         </div>
                     </div>
-                
                 </form>
                 <div class="row">
                     <div class="col s12">
@@ -37,19 +36,14 @@
                 <div class="row">
                     <div class="col s12">
                         <button id="fbLoginButton" class="loginBtn loginBtn--facebook col s12" v-on:click="signInFb()">Login with Facebook</button>
-                    </div>
-                    
+                    </div>       
                 </div>
                 <div class="row">
                     <div class="input-field col s6 offset-s4">
                         <p class="margin medium-small"><a href v-on:click="registerLink()">Register Now!</a></p>
-                    </div>
-                             
+                    </div>       
                 </div>
-                
             </div>
-            
-
             <div class="row"></div>
             <div class="row"></div>
         </div>
@@ -81,7 +75,6 @@ export default {
 
             window.fbAsyncInit = function() {
                 console.log("msk")
-                
                 FB.init({
                 appId      : '262897097612945',
                 cookie     : true,                       
@@ -90,8 +83,6 @@ export default {
                 });
             };
         }
-        
-
     },
     methods:{
 
@@ -139,23 +130,17 @@ export default {
                        })
                        .then(({data})=>{
                            localStorage.setItem("token",data.token)
-                            self.$router.push("/    ")
+                            self.$router.push("/")
                        })
                    })
                }
             })
         },
         registerLink() {
-            this.$router.push("register")
+            this.$router.push("/register")
         }
-
-        
     }    
-
-
-
 }
-
 
 </script>
 

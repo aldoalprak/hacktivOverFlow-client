@@ -11,6 +11,7 @@
         <hr>
         <div class="row">
             <div class="col s8 ques">
+                <!-- ===================================Pertanyaan============================================ -->
                 <div class="row" id="question">
                     <div class="col s3">
                         upvote
@@ -22,13 +23,24 @@
                                 <p>{{dataQuestion.content}}</p>
                             </div>
                             <div class="card-action" v-if="questionId == currUserId">
-                                <button class="btn-floating btn-small waves-effect waves-light red" @click="deleteAnswer(answer._id)"><i class="material-icons">delete</i></button> 
+                                 <button data-target="updateModalQuestion" class="btn-floating btn-small waves-effect waves-light modal-trigger" @click="modalJsQuestion(dataQuestion.content)" ><i class="material-icons">edit</i></button> 
+                                <button class="btn-floating btn-small waves-effect waves-light red" @click="deleteQuestion()"><i class="material-icons">delete</i></button> 
+                            </div>
+                        </div>
+                        <!-- Modal Structure -->
+                        <div id="updateModalQuestion" class="modal">
+                            <div class="modal-content">
+                                <wysiwyg v-model="updateQuestion"/>
+                            </div>
+                            <div class="modal-footer">
+                                <button class="modal-close waves-effect waves-green btn" @click="editQuestion()">Update</button>
                             </div>
                         </div>
                     </div>
                 </div>
                 <h6>{{answerLength}} answers</h6>        
                 <hr>
+                <!-- ===================================list jawaban============================================ -->
                 <div id="answers" v-for="(answer,index) in dataAnswer" :key="index">
                     <div class="row" id="answer">
                         <div class="col s3">
@@ -42,7 +54,17 @@
                                 </div>
                                 <hr>
                                 <div class="card-action" v-if="answer.userId._id == currUserId">
-                                    <button class="btn-floating btn-small waves-effect waves-light red" @click="deleteAnswer(answer._id)"><i class="material-icons">delete</i></button> 
+                                    <button data-target="updateModal" class="btn-floating btn-small waves-effect waves-light modal-trigger" @click="modalJs(answer.content,answer._id)" ><i class="material-icons">edit</i></button> 
+                                    <button class="btn-floating btn-small waves-effect waves-light red" @click="deleteAnswer(answer._id)"><i class="material-icons">delete</i></button>
+                                </div>
+                            </div>
+                            <!-- Modal Structure -->
+                            <div id="updateModal" class="modal">
+                                <div class="modal-content">
+                                    <wysiwyg v-model="updateAnswer"/>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="modal-close waves-effect waves-green btn" @click="editAnswer()">Update</button>
                                 </div>
                             </div>
                         </div>
@@ -50,6 +72,7 @@
                     <hr>
                 </div>
                 <br>
+                <!-- ===================================textbox jawaban============================================ -->
                 <h6>Your Answer</h6>
                 <form method="post">
                     <wysiwyg v-model="answerText"/>
@@ -58,6 +81,7 @@
                 <div class="row">
                     <div class="col 4 offset-s9">
                         <button class="waves-effect waves-light btn" @click="postAnswer()"><i class="material-icons left">mail</i>submit</button>
+                        
                     </div>
                 </div>    
             </div>
@@ -78,7 +102,10 @@ export default {
             questionId:"",
             answerLength:0,
             dataAnswer:[],
-            answerText:""
+            answerText:"",
+            updateAnswer:"",
+            updateAnswerId:"",
+            updateQuestion:""
         }
     },
     created() {
@@ -91,6 +118,17 @@ export default {
         ])
     },
     methods:{
+        modalJsQuestion(content) {
+            this.updateQuestion = content
+            var elems = document.querySelectorAll('#updateModalQuestion');
+            var instances = M.Modal.init(elems);
+        },
+        modalJs(content,id) {
+            this.updateAnswerId = id
+            this.updateAnswer = content
+            var elems = document.querySelectorAll('#updateModal');
+            var instances = M.Modal.init(elems);
+        },
         getOneQuestion() {
             axios({
                 method:"get",
@@ -102,6 +140,33 @@ export default {
                 this.answerLength = data.dataQuestion.answerId.length
                 this.dataQuestion = data.dataQuestion
                 this.questionUsername = data.dataQuestion.userId.username
+            })
+            .catch(err=>{
+                console.log(err.message);
+            })
+        },
+        deleteQuestion() {
+            axios({
+                method:"delete",
+                url:`http://localhost:3000/questions/delete/${this.$route.params.id}`
+            })
+            .then(response=>{
+                this.$router.push("/")
+            })
+            .catch(err=>{
+                console.log(err.message);
+            })
+        },
+        editQuestion() {
+            axios({
+                method:"put",
+                url:`http://localhost:3000/questions/update/${this.$route.params.id}`,
+                data:{
+                    content:this.updateQuestion
+                }
+            })
+            .then(response=>{
+                this.getOneQuestion()
             })
             .catch(err=>{
                 console.log(err.message);
@@ -155,7 +220,10 @@ export default {
                 if (result.value) {
                     axios({
                         method:"delete",
-                        url:`http://localhost:3000/answers/delete/${id}`
+                        url:`http://localhost:3000/answers/delete/${id}`,
+                        headers:{
+                            token:localStorage.getItem("token")
+                        }
                     })
                     .then(response=>{
                         swal(
@@ -170,6 +238,25 @@ export default {
                         console.log(err.message);
                     })             
                 }
+            })
+        },
+        editAnswer() {
+            axios({
+                method:"put",
+                url:`http://localhost:3000/answers/update/${this.updateAnswerId}`,
+                data:{
+                    content: this.updateAnswer
+                },
+                headers:{
+                    token: localStorage.getItem("token")
+                }
+            })
+            .then(response=>{
+                console.log(response);
+                this.getAnswers()
+            })
+            .catch(err=>{
+                console.log(err.message);
             })
         }
     }

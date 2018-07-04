@@ -7,15 +7,15 @@
                         <h5>Top Questions</h5>
                     </div>
                     <div class="col s2 ">
-                       <router-link :to="'/askquestion'"><button class="waves-effect waves-light btn">Ask_Question</button></router-link>
+                        <button class="waves-effect waves-light btn" @click="questionAsk()">Ask_Question</button>
                     </div>        
                 </div>
                 <hr>
                 <div class="row">
                     <div class="col s12">
-                        <div class="card blue-grey darken-1" v-for="(question,index) in allQuestions" :key="index">
+                        <div class="card blue-grey darken-1"  v-for="(question,index) in allQuestions" :key="index">
                             <div class="card-content white-text">
-                                <span class="card-title">{{question.userId.username}}</span>
+                                <span class="card-title">{{question.userId.username }}</span>
                                 <router-link :to="`/questions/${question._id}`" class="link"><p>{{question.title}}</p></router-link>
                             </div>
                             <div class="card-action">
@@ -37,10 +37,16 @@ import axios from 'axios'
 export default {
     data(){
         return {
-            allQuestions:[]
+            allQuestions:[],
+            adminStatus : false
         }
     },
     created() {
+        if(localStorage.hasOwnProperty("token")){
+            this.adminStatus = true
+        }else{
+            this.adminStatus = false
+        }
         this.getAllPost()
     },
     methods:{
@@ -53,8 +59,20 @@ export default {
             .then(({data})=>{
                 this.allQuestions = data.dataQuestions
                 console.log(this.allQuestions);
-                
+                console.log("xxxx",this.allQuestions[0].userId.username);
             })
+        },
+        questionAsk() {
+            if(this.adminStatus == true) {
+                this.$router.push("/askquestion")
+            }else{
+                swal(
+                    'you must login to ask',
+                    '.',
+                    'warning'
+                )
+            }
+            
         }
     }
 

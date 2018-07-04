@@ -5,7 +5,7 @@
                 <h5>{{dataQuestion.title}}</h5>
             </div>
             <div class="col s2">
-                <router-link :to="'/askquestion'"><button class="waves-effect waves-light btn">Ask_Question</button></router-link>
+                <button class="waves-effect waves-light btn" @click="questionAsk()">Ask_Question</button>
             </div>
         </div>
         <hr>
@@ -26,7 +26,7 @@
                         <div class="card blue-grey darken-1">
                             <div class="card-content white-text">
                                 <span class="card-title">{{questionUsername}}</span>
-                                <p>{{dataQuestion.content}}</p>
+                                <div v-html="dataQuestion.content"></div>
                             </div>
                             <div class="card-action" v-if="questionId == currUserId">
                                  <button data-target="updateModalQuestion" class="btn-floating btn-small waves-effect waves-light modal-trigger" @click="modalJsQuestion(dataQuestion.content)" ><i class="material-icons">edit</i></button> 
@@ -62,7 +62,8 @@
                             <div class="card green lighten-2">
                                 <div class="card-content white-text">
                                     <span class="card-title">{{answer.userId.username}}</span>
-                                    <p>{{answer.content}}</p>
+                                     <div v-html="answer.content"></div>
+                                     <!-- <span v-html="answer.content"></span> -->
                                 </div>
                                 <hr>
                                 <div class="card-action" v-if="answer.userId._id == currUserId">
@@ -109,6 +110,7 @@ import { mapState,mapActions } from 'vuex'
 export default {
     data() {
         return {
+            adminStatus:false,
             dataQuestion:{},
             questionUsername:"",
             questionId:"", // question userId
@@ -123,6 +125,11 @@ export default {
         }
     },
     created() {
+        if(localStorage.hasOwnProperty("token")){
+            this.adminStatus = true
+        }else{
+            this.adminStatus = false
+        }
         this.getOneQuestion()
         this.getAnswers()
     },
@@ -132,6 +139,17 @@ export default {
         ])
     },
     methods:{
+        questionAsk() {
+            if(this.adminStatus == true) {
+                this.$router.push("/askquestion")
+            }else{
+                swal(
+                    'you must login to ask',
+                    '.',
+                    'warning'
+                )
+            }  
+        },
         modalJsQuestion(content) {
             this.updateQuestion = content
             var elems = document.querySelectorAll('#updateModalQuestion');

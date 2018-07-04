@@ -1,7 +1,7 @@
 <template>
     <div class="wrapper">
         <div class="row">
-            <div class="col s8 ques">
+            <div class="col s11 ques">
                 <div class="row">
                     <div class="col s10">
                         <h5>Top Questions</h5>
@@ -16,7 +16,7 @@
                         <div class="card blue-grey darken-1" v-for="(question,index) in allQuestions" :key="index">
                             <div class="card-content white-text">
                                 <span class="card-title">{{question.userId.username}}</span>
-                                <router-link :to="`/questions/${question._id}`"><p>{{question.title}}</p></router-link>
+                                <router-link :to="`/questions/${question._id}`" class="link"><p>{{question.title}}</p></router-link>
                             </div>
                             <div class="card-action">
                                 <router-link :to="`/questions/${question._id}`">Answers {{question.answerId.length}}</router-link>
@@ -76,12 +76,6 @@ export default {
       }
     }
 
-/* .ques{
-    background-color: aquamarine
-}    
-
-.butn {
-    background-color: black
-} */
+ .link { color:white; }
 </style>
 

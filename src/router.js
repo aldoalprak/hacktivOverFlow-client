@@ -21,11 +21,6 @@ export default new Router({
       name: 'question',
       component: Question
     },
-    // {
-    //   path: '/editquestion/:id',
-    //   name: 'editquestion',
-    //   component: EditQuestion
-    // },
     {
       path: '/askquestion',
       name: 'askquestion',

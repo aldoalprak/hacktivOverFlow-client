@@ -1,7 +1,7 @@
 <template>
     <div class="wrapper">
         <div class="navbar-fixed">
-            <nav class="grey lighten-1">
+            <nav class="grey darken-3">
                 <div class="nav-wrapper">
                 <router-link :to="'/'"><a href class="brand-logo"><i class="material-icons">cloud</i>StackExchange</a></router-link>
                 </div>

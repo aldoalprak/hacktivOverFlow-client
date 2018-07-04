@@ -3,19 +3,20 @@
         <ul id="slide-out" class="sidenav sidenav-fixed">
             <li><div class="user-view">
                     <div class="background">
-                        <img src="https://2.bp.blogspot.com/-f1lVE6dZO5o/VMekdVmR4qI/AAAAAAAAOfY/IB7HjtXucNA/w800-h800/Full%2BComputer%2BSize%2BMaterial%2BDesign%2BWallpaper%2B(1).jpg">
+                        <img src="http://caskia.me/wp-content/uploads/2018/03/android-lollipop-hd-wallpapers-for-throughout-wallpaper-1024x640.jpg">
                     </div>
                     <router-link :to="'/'"><img class="circle" src="https://wallpapercave.com/wp/MOyrUQC.jpg"></router-link>
                     <span class="white-text name">Hello {{username}} !</span>
                     <span class="white-text email">{{email}}</span>
-                    <a  href class="waves-effect waves-light white-text"  @click="logout()">LogOut</a>
+                    <a  href class="waves-effect waves-light white-text"  v-if="adminStatus == true" @click="logout()">LogOut</a>
+                    <a  href class="waves-effect waves-light white-text"  v-if="adminStatus == false" @click="login()">LogIn</a>
                 </div></li>
             <li><router-link :to="'/'"><i class="material-icons">cloud</i>Welcome</router-link></li>
             <li><div class="divider"></div></li>
             <li><a class="subheader">Stack Overflow</a></li>
             
         </ul>
-        <a href="#" data-target="slide-out" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <a href="#" data-target="slide-out" @click="sideNavJs()" class="sidenav-trigger"><i class="material-icons">menu</i></a>
     </div>
 </template>
 
@@ -23,13 +24,36 @@
 import { mapState,mapActions } from 'vuex'
 
 export default {
+    data() {
+        return{
+            adminStatus:false
+        }
+        
+    },
     created(){
+        if(localStorage.hasOwnProperty('token')){
+            console.log(this.adminStatus);
+            this.adminStatus = true
+        }else{
+            this.adminStatus = false
+        }
         this.showUser()
     },
     methods:{
         ...mapActions([
             'showUser'
-        ])
+        ]),
+        sideNavJs() {
+            var elems = document.querySelectorAll('.sidenav');
+            var instances = M.Sidenav.init(elems);
+        },
+        logout() {
+            localStorage.clear()
+            this.$router.push('/')
+        },
+        login() {
+            this.$router.push('/login')
+        }
     },
     computed:{
         ...mapState([

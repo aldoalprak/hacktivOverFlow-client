@@ -10,11 +10,17 @@
         </div>
         <hr>
         <div class="row">
-            <div class="col s8 ques">
+            <div class="col s11 ques">
                 <!-- ===================================Pertanyaan============================================ -->
                 <div class="row" id="question">
                     <div class="col s3">
-                        upvote
+                        <div class="row">
+                            <i class="material-icons medium hoverable upvote" @click="checkUpvoteQuestion()">keyboard_arrow_up</i>
+                        </div>
+                            <h5>{{questionVote.length}}</h5>
+                        <div class="row">
+                            <i class="material-icons medium hoverable downvote" @click="checkDownvoteQuestion()">keyboard_arrow_down</i>
+                        </div>
                     </div>
                     <div class="col s9">
                         <div class="card blue-grey darken-1">
@@ -44,7 +50,13 @@
                 <div id="answers" v-for="(answer,index) in dataAnswer" :key="index">
                     <div class="row" id="answer">
                         <div class="col s3">
-                            upvote
+                            <div class="row">
+                                <i class="material-icons medium hoverable upvote" @click="checkUpvoteAnswer(index)">keyboard_arrow_up</i>
+                            </div>
+                                <h5>{{answer.votes.length}}</h5>
+                            <div class="row">
+                                <i class="material-icons medium hoverable downvote" @click="checkDownvoteAnswer(index)">keyboard_arrow_down</i>
+                            </div>
                         </div>
                         <div class="col s9">
                             <div class="card green lighten-2">
@@ -99,13 +111,15 @@ export default {
         return {
             dataQuestion:{},
             questionUsername:"",
-            questionId:"",
+            questionId:"", // question userId
             answerLength:0,
             dataAnswer:[],
             answerText:"",
             updateAnswer:"",
             updateAnswerId:"",
-            updateQuestion:""
+            updateQuestion:"",
+
+            questionVote:[]
         }
     },
     created() {
@@ -135,11 +149,14 @@ export default {
                 url:`http://localhost:3000/questions/showone/${this.$route.params.id}`
             })
             .then(({data})=>{
-                console.log(data.dataQuestion.answerId.length);
                 this.questionId = data.dataQuestion.userId._id
                 this.answerLength = data.dataQuestion.answerId.length
                 this.dataQuestion = data.dataQuestion
                 this.questionUsername = data.dataQuestion.userId.username
+                this.questionVote = data.dataQuestion.votes
+                console.log("hehehhe",this.questionVote,this.questionVote.indexOf(this.currUserId)); 
+                console.log("hohoho", this.currUserId,this.questionId);
+                   
             })
             .catch(err=>{
                 console.log(err.message);
@@ -178,7 +195,7 @@ export default {
                 url:`http://localhost:3000/answers/showbypostid/${this.$route.params.id}`
             })
             .then(({data})=>{
-                console.log(data.dataAnswer)
+                // console.log(data.dataAnswer)
                 this.dataAnswer = data.dataAnswer
             })
             .catch(err=>{
@@ -223,6 +240,9 @@ export default {
                         url:`http://localhost:3000/answers/delete/${id}`,
                         headers:{
                             token:localStorage.getItem("token")
+                        },
+                        data:{
+                            questionId:this.$route.params.id
                         }
                     })
                     .then(response=>{
@@ -231,7 +251,8 @@ export default {
                             'Your file has been deleted.',
                             'success'
                             )
-                        this.getAnswers()      
+                        this.getOneQuestion() 
+                        this.getAnswers()   
                         console.log(response);
                     })
                     .catch(err=>{
@@ -258,6 +279,146 @@ export default {
             .catch(err=>{
                 console.log(err.message);
             })
+        },
+        checkUpvoteQuestion() {
+            if(this.questionId !== this.currUserId){
+                console.log("masuk upvote",this.questionVote,this.currUserId);
+                
+                if(this.questionVote.indexOf(this.currUserId) == -1) {
+                    this.questionVote.push(this.currUserId)
+                    axios({
+                        method:"put",
+                        url:`http://localhost:3000/questions/upvote/${this.$route.params.id}`,
+                        data: {
+                            userId: this.currUserId
+                        }
+                    })
+                    .then(response=>{
+                        console.log(response);
+                    })
+                    .catch(err=>{
+                        console.log(err.message);
+                    })
+                }else{
+                    swal(
+                        'you\'ve already upvoted this question',
+                        '.',
+                        'warning'
+                    )
+                }
+            }else{
+                swal(
+                    'you cant\'t upvote your question',
+                    '.',
+                    'warning'
+                )  
+            }
+        },
+        checkDownvoteQuestion() {
+            if(this.questionId !== this.currUserId){
+                // console.log("masuk upvote",this.questionVote,this.currUserId);
+                if(this.questionVote.indexOf(this.currUserId) !== -1) {
+                    let index = this.questionVote.indexOf(this.currUserId)
+                    
+                    this.questionVote.splice(index,1)
+                    console.log("xxxxx",this.questionVote);
+                    console.log("id====",this.$route.params.id);
+                    
+                    axios({
+                        method:"put",
+                        url:`http://localhost:3000/questions/downvote/${this.$route.params.id}`,
+                        data: {
+                            currVotes: this.questionVote
+                        }
+                    })
+                    .then(response=>{
+                        console.log(response);
+                    })
+                    .catch(err=>{
+                        console.log(err.message);
+                    })
+                }else{
+                    swal(
+                        'you haven\'t upvoted, so you cant\'t downvote this question',
+                        '.',
+                        'warning'
+                    ) 
+                }
+            }else{
+                swal(
+                    'you cant\'t downvote your question',
+                    '.',
+                    'warning'
+                )  
+            }
+        },
+        checkUpvoteAnswer(index) {
+            if(this.dataAnswer[index].userId._id !== this.currUserId) {
+                console.log("msk answer");
+                if(this.dataAnswer[index].votes.indexOf(this.currUserId) == -1) {
+                    this.dataAnswer[index].votes.push(this.currUserId)
+
+                    axios({
+                        method:"put",
+                        url:`http://localhost:3000/answers/upvote/${this.dataAnswer[index]._id}`,
+                        data:{
+                            userId:this.currUserId
+                        }
+                    })
+                    .then(response=>{
+                        console.log(response);
+                    })
+                    .catch(err=>{
+                        console.log(err.message);
+                    })
+                }else{
+                    swal(
+                        'you\'ve already upvoted this answer',
+                        '.',
+                        'warning'
+                    )
+                } 
+            }else{
+               swal(
+                    'you cant\'t upvote your answer',
+                    '.',
+                    'warning'
+                )   
+            }
+        },
+        checkDownvoteAnswer(index) {
+            if(this.dataAnswer[index].userId._id !== this.currUserId) {
+                console.log("msk answer");
+                if(this.dataAnswer[index].votes.indexOf(this.currUserId) !== -1) {
+                    let indexUserId = this.dataAnswer[index].votes.indexOf(this.currUserId)
+                    this.dataAnswer[index].votes.splice(indexUserId,1)
+                    axios({
+                        method:"put",
+                        url:`http://localhost:3000/answers/downvote/${this.dataAnswer[index]._id}`,
+                        data:{
+                            currVotes:this.dataAnswer[index].votes
+                        }
+                    })
+                    .then(response=>{
+                        console.log(response);
+                    })
+                    .catch(err=>{
+                        console.log(err.message);
+                    })
+                }else{
+                    swal(
+                        'you haven\'t upvoted so you can\'t downvote this answer',
+                        '.',
+                        'warning'
+                    )
+                } 
+            }else{
+               swal(
+                    'you cant\'t downvote your answer',
+                    '.',
+                    'warning'
+                )   
+            }
         }
     }
 }
@@ -267,6 +428,14 @@ export default {
 <style scoped>
 .wrapper {
     padding-left: 310px;
+}
+
+.upvote {
+    cursor: pointer;
+}
+
+.downvote {
+    cursor: pointer;
 }
 
 @media only screen and (max-width : 992px) {

@@ -3,7 +3,7 @@
         <ul id="slide-out" class="sidenav sidenav-fixed">
             <li><div class="user-view">
                     <div class="background">
-                        <img src="http://caskia.me/wp-content/uploads/2018/03/android-lollipop-hd-wallpapers-for-throughout-wallpaper-1024x640.jpg">
+                        <img src="https://s.tmimgcdn.com/blog/wp-content/uploads/2016/04/1-9-2.jpg?x54449">
                     </div>
                     <router-link :to="'/'"><img class="circle" src="https://wallpapercave.com/wp/MOyrUQC.jpg"></router-link>
                     <span class="white-text name">Hello {{username}} !</span>

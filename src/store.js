@@ -22,7 +22,7 @@ export default new Vuex.Store({
     showUser({commit}) {
       axios({
         method:"get",
-        url:"http://localhost:3000/users/showone",
+        url:"https://api_hacktivoverflow.alprak.net/users/showone",
         headers:{
           token:localStorage.getItem("token")
         }

@@ -164,7 +164,7 @@ export default {
         getOneQuestion() {
             axios({
                 method:"get",
-                url:`http://localhost:3000/questions/showone/${this.$route.params.id}`
+                url:`https://api_hacktivoverflow.alprak.net/questions/showone/${this.$route.params.id}`
             })
             .then(({data})=>{
                 this.questionId = data.dataQuestion.userId._id
@@ -183,7 +183,7 @@ export default {
         deleteQuestion() {
             axios({
                 method:"delete",
-                url:`http://localhost:3000/questions/delete/${this.$route.params.id}`
+                url:`https://api_hacktivoverflow.alprak.net/questions/delete/${this.$route.params.id}`
             })
             .then(response=>{
                 this.$router.push("/")
@@ -195,7 +195,7 @@ export default {
         editQuestion() {
             axios({
                 method:"put",
-                url:`http://localhost:3000/questions/update/${this.$route.params.id}`,
+                url:`https://api_hacktivoverflow.alprak.net/questions/update/${this.$route.params.id}`,
                 data:{
                     content:this.updateQuestion
                 }
@@ -210,7 +210,7 @@ export default {
         getAnswers() {
             axios({
                 method:"get",
-                url:`http://localhost:3000/answers/showbypostid/${this.$route.params.id}`
+                url:`https://api_hacktivoverflow.alprak.net/answers/showbypostid/${this.$route.params.id}`
             })
             .then(({data})=>{
                 // console.log(data.dataAnswer)
@@ -223,7 +223,7 @@ export default {
         postAnswer(){
             axios({
                 method:"post",
-                url:"http://localhost:3000/answers/add",
+                url:"https://api_hacktivoverflow.alprak.net/answers/add",
                 data:{
                     content:this.answerText,
                     questionId: this.$route.params.id,
@@ -255,7 +255,7 @@ export default {
                 if (result.value) {
                     axios({
                         method:"delete",
-                        url:`http://localhost:3000/answers/delete/${id}`,
+                        url:`https://api_hacktivoverflow.alprak.net/answers/delete/${id}`,
                         headers:{
                             token:localStorage.getItem("token")
                         },
@@ -282,7 +282,7 @@ export default {
         editAnswer() {
             axios({
                 method:"put",
-                url:`http://localhost:3000/answers/update/${this.updateAnswerId}`,
+                url:`https://api_hacktivoverflow.alprak.net/answers/update/${this.updateAnswerId}`,
                 data:{
                     content: this.updateAnswer
                 },
@@ -306,7 +306,7 @@ export default {
                     this.questionVote.push(this.currUserId)
                     axios({
                         method:"put",
-                        url:`http://localhost:3000/questions/upvote/${this.$route.params.id}`,
+                        url:`https://api_hacktivoverflow.alprak.net/questions/upvote/${this.$route.params.id}`,
                         data: {
                             userId: this.currUserId
                         }
@@ -344,7 +344,7 @@ export default {
                     
                     axios({
                         method:"put",
-                        url:`http://localhost:3000/questions/downvote/${this.$route.params.id}`,
+                        url:`https://api_hacktivoverflow.alprak.net/questions/downvote/${this.$route.params.id}`,
                         data: {
                             currVotes: this.questionVote
                         }
@@ -378,7 +378,7 @@ export default {
 
                     axios({
                         method:"put",
-                        url:`http://localhost:3000/answers/upvote/${this.dataAnswer[index]._id}`,
+                        url:`https://api_hacktivoverflow.alprak.net/answers/upvote/${this.dataAnswer[index]._id}`,
                         data:{
                             userId:this.currUserId
                         }
@@ -412,7 +412,7 @@ export default {
                     this.dataAnswer[index].votes.splice(indexUserId,1)
                     axios({
                         method:"put",
-                        url:`http://localhost:3000/answers/downvote/${this.dataAnswer[index]._id}`,
+                        url:`https://api_hacktivoverflow.alprak.net/answers/downvote/${this.dataAnswer[index]._id}`,
                         data:{
                             currVotes:this.dataAnswer[index].votes
                         }

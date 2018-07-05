@@ -91,7 +91,7 @@ export default {
                 if(!result) {
                     
                 }else{
-                    axios.post('http://localhost:3000/users/signin',{
+                    axios.post('https://api_hacktivoverflow.alprak.net/users/signin',{
                         email:this.email,
                         password:this.password
                     })
@@ -121,7 +121,7 @@ export default {
                        console.log(dataUser)
                        axios({
                            method:"post",
-                           url:'http://localhost:3000/users/signin',
+                           url:'https://api_hacktivoverflow.alprak.net/users/signin',
                            data: {
                                email: dataUser.email,
                                username: dataUser.first_name,

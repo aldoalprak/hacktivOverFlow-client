@@ -54,7 +54,7 @@ export default {
         getAllPost() {
             axios({
                 method:"get",
-                url:"http://localhost:3000/questions/show",
+                url:"https://api_hacktivoverflow.alprak.net/questions/show",
             })
             .then(({data})=>{
                 this.allQuestions = data.dataQuestions

@@ -36,7 +36,7 @@ export default {
        addQuestion() {
            axios({
                method:"post",
-               url:"http://localhost:3000/questions/add",
+               url:"https://api_hacktivoverflow.alprak.net/questions/add",
                data:{
                    title: this.title,
                    content: this.questionText

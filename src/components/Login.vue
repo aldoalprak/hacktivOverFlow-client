@@ -2,8 +2,8 @@
         <div id="login-page" class="row" >
             <div class="row"></div>
             <div class="row"></div>
-            <div class="col s4"></div>
-            <div class="col s4 z-depth-4 card-panel">
+            <div class="col s1 m4"></div>
+            <div class="col s10 m4 z-depth-5 card-panel">
                 <form class="login-form">
                     <div class="row">
                         <div class="input-field col s12 center">

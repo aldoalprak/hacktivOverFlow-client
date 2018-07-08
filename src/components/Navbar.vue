@@ -1,9 +1,9 @@
 <template>
     <div class="wrapper">
-        <div class="navbar-fixed">
+        <div class="navbar-fixed"   >
             <nav class="grey darken-3">
                 <div class="nav-wrapper">
-                <router-link :to="'/'"><a href class="brand-logo"><i class="material-icons">cloud</i>StackExchange</a></router-link>
+                <router-link :to="'/'"><a href class="brand-logo"><i class="material-icons col s6" >cloud</i>StackExchange</a></router-link>
                 </div>
             </nav>
         </div>

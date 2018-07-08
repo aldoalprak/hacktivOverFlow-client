@@ -9,7 +9,7 @@
                     <span class="white-text name">Hello {{username}} !</span>
                     <span class="white-text email">{{email}}</span>
                     <a  href class="waves-effect waves-light white-text"  v-if="adminStatus == true" @click="logout()">LogOut</a>
-                    <a  href class="waves-effect waves-light white-text"  v-if="adminStatus == false" @click="login()">LogIn</a>
+                    <router-link :to="'/login'"  class="waves-effect waves-light white-text"  v-if="adminStatus == false">LogIn</router-link>
                 </div></li>
             <li><router-link :to="'/'"><i class="material-icons">cloud</i>Welcome</router-link></li>
             <li><div class="divider"></div></li>
